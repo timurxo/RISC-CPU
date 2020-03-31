@@ -1,0 +1,83 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+//          Decodes the instructions and
+//			generates the control signals that
+//			are going to be used throughout the pipeline.
+//
+//          IR - Instruction Register
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module INSTRUCTION_DECODER(
+        input [15:0] instr, // opcode
+        output reg CS11, BA1, AA1, MB1, MA1, SH1, FS1, MW1, PS1, BS11, MD1, DA1, RW1
+
+       
+    );
+    
+   
+    
+    always@(*)
+    begin
+        case(instr)
+        
+        // BZ
+        16'b0100000:  
+                    begin
+                     CS11 <= 1;
+                     MA1 <= 0;
+                     MB1 <= 1;
+                     FS1 <= 16'b00000;
+                     MW1 <= 0;
+                     PS1 <= 0;
+                     BS11 <= 2'b00;
+                  //   MD <= 
+                     RW1 <= 0;
+                     end
+        // BNZ
+        16'b1100000:   
+                    begin
+                     CS11 <= 1;
+                     MA1 <= 0;
+                     MB1 <= 1;
+                     FS1 <= 16'b00000;
+                     MW1 <= 0;
+                     PS1 <= 1;
+                     BS11 <= 2'b01;
+                  //   MD <= 
+                     RW1 <= 0;
+                    end   
+        
+        // JMP
+        16'b1000100:   
+                    begin
+                     CS11 <= 1;
+                   //  MA <= 0;
+                     MB1 <= 1;
+                   //  FS <= 16'b00000;
+                     MW1 <= 0;
+                   //  PS <= 0;
+                     BS11 <= 2'b11;
+                  //   MD <= 
+                     RW1 <= 0;
+                    end  
+        
+        // JML
+        16'b0000111:   
+                    begin
+                     CS11 <= 1;
+                     MA1 <= 1;
+                     MB1 <= 1;
+                     FS1 <= 16'b00111;
+                     MW1 <= 0;
+                   //  PS <= 0;
+                     BS11 <= 2'b11;
+                     MD1 <= 2'b00;
+                     RW1 <= 1;
+                    end        
+            
+    endcase
+    end
+    
+    
+endmodule
