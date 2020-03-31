@@ -1,0 +1,38 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 03/29/2020 07:00:38 AM
+// Design Name: 
+// Module Name: DATA_MEMORY1
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+// READ MEM?
+module DATA_MEMORY1(
+        input clk,
+        input [31:0] Bus_A,
+        output reg [31:0] data_out
+    );
+    
+    reg [31:0] mem_data;
+    
+    always @(posedge clk) 
+    begin
+        data_out = mem_data[Bus_A];
+    end
+     
+
+    
+endmodule
