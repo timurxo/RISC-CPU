@@ -1,0 +1,107 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 03/29/2020 06:39:55 AM
+// Design Name: 
+// Module Name: MODIFIED_FUNCTION_UNIT
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+// ALU AND SHIFTER
+module MODIFIED_FUNCTION_UNIT(
+        input Bus_A, Bus_B,
+        input [4:0] SH,
+        input [4:0] FS,
+        output [15:0] Z1, C, N, V, N_xor_V,
+        output [15:0] F
+
+    );
+    
+    // ================ ALU ====================
+    reg [15:0] resultA;
+    assign G = resultA;
+    
+    
+    always@(*)
+    begin
+        case (FS)
+        4'b0000:
+           resultA = Bus_A; 
+        4'b0001: 
+           resultA = Bus_A + 1;
+        4'b0010: 
+           resultA = Bus_A + Bus_B;
+        4'b0011: 
+           resultA = Bus_A + Bus_B + 1;
+        4'b0100: 
+           resultA = Bus_A + ~Bus_B;
+        4'b0101: 
+           resultA = Bus_A + ~Bus_B + 1;
+        4'b0110: 
+           resultA = Bus_A - 1;
+        4'b0111:
+           resultA = Bus_A;
+        4'b1000: 
+           resultA = Bus_A & Bus_B;
+        4'b1011: 
+           resultA = Bus_A | Bus_B;
+        4'b1100:
+           resultA = Bus_A ^ Bus_B;
+        4'b1111: 
+           resultA = ~Bus_A;
+          default: resultA = Bus_A + Bus_B; 
+        endcase        
+    end
+    
+  assign V = {1'b0, Bus_A} + {1'b0, Bus_B};   // overflow
+  assign C = V[16];  // carryout
+  assign N = resultA [15];
+  assign Z1 = ~| resultA;
+  
+  // ================ XOR GATE ====================
+  assign N_xor_V = N ^ V;
+  
+  // ================ SHIFTER ====================
+  
+    reg [15:0] resultS;
+    assign H = resultS;
+    
+   always@(*)
+    begin
+        case (SH)
+        
+        2'b01:    resultS = Bus_B << 1;
+        2'b10:    resultS = Bus_B >> 1;
+        default:  resultS = 0;
+        
+        endcase
+    end
+    
+    
+    // ================ MUX ====================
+    reg [15:0] resultM;
+    assign F = resultM;
+
+   always@(*)
+    begin
+        case (SH) 
+             
+        1'b0: resultM = G;  // alu G
+        1'b1: resultM = H;  // shifter
+        
+        endcase
+    end
+    
+endmodule
